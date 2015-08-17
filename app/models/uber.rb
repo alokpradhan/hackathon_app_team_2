@@ -22,14 +22,35 @@ class Uber
   def authorize
     client = OAuth2::Client.new(ENV['UBER_CLIENT_ID'],
                                 site: 'https://login.uber.com/oauth/authorize')
-    client.auth_code.authorize_url(:redirect_uri => 'http://localhost:3000/oauth2/callback')
+    client.auth_code.authorize_url( redirect_uri: 'http://localhost:3000/oauth2/callback',
+                                    headers: {})
     @token = client.auth_code.get_token(client_secret: ENV['UBER_CLIENT_SECRET'],
                                         client_id: ENV['UBER_CLIENT_ID'],
                                         grant_type: 'authorization_code',
-                                        redirect_uri: 'http://localhost:3000',
-                                        code:'authorization_code'
-                                        )
+                                        redirect_uri: 'https://login.uber.com/oauth/token',
+                                        code: code)
   end
+
+
+#  uber_api = OAuth2Service(
+#      client_id='INSERT_CLIENT_ID',
+#      client_secret='INSERT_CLIENT_SECRET',
+#      name='INSERT_APP_NAME',
+#      authorize_url='https://login.uber.com/oauth/authorize',
+#      access_token_url='https://login.uber.com/oauth/token',
+#      base_url='https://api.uber.com/v1/',
+#  )
+
+# parameters = {
+#     'response_type': 'code',
+#     'redirect_uri': 'INSERT_ROUTE_TO_STEP_TWO',
+#     'scope': 'profile',
+# }
+
+# # Redirect user here to authorize your application
+# login_url = uber_api.get_authorize_url(**parameters)
+
+
 
   private
 
